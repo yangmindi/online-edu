@@ -17,6 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/eduservice/teacher")
+@CrossOrigin //跨域
 public class TeacherController {
 
     @Autowired
