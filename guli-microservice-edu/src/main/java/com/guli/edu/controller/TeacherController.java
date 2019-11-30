@@ -1,8 +1,10 @@
 package com.guli.edu.controller;
 
 
+import com.guli.common.vo.R;
 import com.guli.edu.entity.Teacher;
 import com.guli.edu.service.TeacherService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +26,13 @@ public class TeacherController {
     private TeacherService teacherService;
 
     //1.查询所有的讲师功能
+    @ApiOperation(value = "所有讲师列表")
     @GetMapping
-    public List<Teacher> getAllTeacherList(){
+    public R getAllTeacherList(){
         //调用service的方法
         List<Teacher> list = teacherService.list(null);
 
-        return list;
+        return R.ok().data("items",list);
     }
 
     @DeleteMapping("{id}")
