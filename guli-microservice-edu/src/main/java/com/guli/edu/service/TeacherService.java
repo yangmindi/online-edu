@@ -1,7 +1,9 @@
 package com.guli.edu.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guli.edu.entity.Teacher;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.guli.edu.entity.query.TeacherQuery;
 
 /**
  * <p>
@@ -13,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface TeacherService extends IService<Teacher> {
 
+    //条件查询带分页
+    void pageListCondition(Page<Teacher> pageTeacher, TeacherQuery teacherQuery);
 }
