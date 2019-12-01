@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guli.edu.entity.Teacher;
 import com.guli.edu.entity.query.TeacherQuery;
+import com.guli.edu.handler.GuliException;
 import com.guli.edu.mapper.TeacherMapper;
 import com.guli.edu.service.TeacherService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -26,6 +27,13 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         //关键：queryTeacher有传递过来的条件值，判断，如果有条件，拼接条件
         QueryWrapper<Teacher> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc("sort");
+
+
+        try {
+            int i = 9 / 0;
+        }catch (Exception e){
+            throw new GuliException(20001,"执行自定义异常");
+        }
 
         if (teacherQuery == null){
             baseMapper.selectPage(pageTeacher, queryWrapper);
