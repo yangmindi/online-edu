@@ -29,12 +29,6 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         queryWrapper.orderByAsc("sort");
 
 
-        try {
-            int i = 9 / 0;
-        }catch (Exception e){
-            throw new GuliException(20001,"执行自定义异常");
-        }
-
         if (teacherQuery == null){
             baseMapper.selectPage(pageTeacher, queryWrapper);
             return;

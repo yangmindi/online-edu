@@ -22,11 +22,23 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/eduservice/teacher")
-@CrossOrigin //跨域
+@CrossOrigin
 public class TeacherController {
 
     @Autowired
     private TeacherService teacherService;
+
+    //模拟登陆
+    @PostMapping("login")
+    public R login(){
+        return R.ok().data("token","admin");
+    }
+
+    //获取用户信息
+    @GetMapping("info")
+    public R info(){
+        return R.ok().data("roles","[admin]").data("name","admin").data("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+    }
 
     //7.根据id修改的方法
     @PostMapping("updateTeacher/{id}")
@@ -58,7 +70,7 @@ public class TeacherController {
     }
 
     //4.多条件组合查询带分页
-    @PostMapping("moreCondition/{page}/{limit}")
+    @PostMapping("moreConditionPageList/{page}/{limit}")
     public R getMoreConditionPageList(@PathVariable Long page,
                                       @PathVariable Long limit,
                                       @RequestBody(required = false) TeacherQuery teacherQuery) {
