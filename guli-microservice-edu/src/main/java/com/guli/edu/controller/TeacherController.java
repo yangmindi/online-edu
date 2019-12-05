@@ -55,7 +55,7 @@ public class TeacherController {
     @GetMapping("getTeacherInfo/{id}")
     public R getTeacherInfo(@PathVariable String id){
         Teacher teacher = teacherService.getById(id);
-        return R.ok().data("teacher", teacher);
+        return R.ok().data("eduTeacher", teacher);
     }
 
     //5.添加讲师的方法
@@ -85,7 +85,7 @@ public class TeacherController {
     }
 
     //3.分页查询讲师列表的方法
-    @GetMapping("{page}/{limit}")
+    @GetMapping("pageList/{page}/{limit}")
     public R pageList(@PathVariable Long page,
                       @PathVariable Long limit) {
         Page<Teacher> pageParm = new Page<>(page, limit);
@@ -106,10 +106,15 @@ public class TeacherController {
         return R.ok().data("items", list);
     }
 
+    //2 逻辑删除讲师
     @DeleteMapping("{id}")
-    public boolean removeById(@PathVariable String id) {
-        boolean b = teacherService.removeById(id);
-        return b;
+    public R deleteTeacherById(@PathVariable String id) {
+        boolean flag = teacherService.removeById(id);
+        if(flag) {
+            return R.ok();
+        } else {
+            return R.error();
+        }
     }
 }
 
