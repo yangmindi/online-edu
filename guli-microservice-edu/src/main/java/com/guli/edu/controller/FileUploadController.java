@@ -3,6 +3,7 @@ package com.guli.edu.controller;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
 import com.guli.common.vo.R;
+import com.guli.edu.handler.ConstantPropertiesUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,11 +22,11 @@ public class FileUploadController {
     public R uploadTeacherImg(@RequestParam("file") MultipartFile file) throws IOException {//获取上传的文件
 
         // Endpoint以杭州为例，其它Region请按实际情况填写。
-        String endpoint = "oss-cn-beijing.aliyuncs.com";
+        String endpoint = ConstantPropertiesUtil.ENDPOINT;
 // 云账号AccessKey有所有API访问权限，建议遵循阿里云安全最佳实践，创建并使用RAM子账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建。
-        String accessKeyId = "LTAI4FntxrZRRtbE48x5RhzT";
-        String accessKeySecret = "OKKjfgTKsjXemehzJnzUHVxgBYjYfU";
-        String bucketName = "youee";
+        String accessKeyId = ConstantPropertiesUtil.KEYID;
+        String accessKeySecret = ConstantPropertiesUtil.KEYSECRET;
+        String bucketName = ConstantPropertiesUtil.BUCKETNAME;
         //1.获取上传的文件
         //2.获取文件名称，上传文件输入流
         String originalFilename = file.getOriginalFilename();
