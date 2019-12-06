@@ -4,12 +4,15 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
 import com.guli.common.vo.R;
 import com.guli.edu.handler.ConstantPropertiesUtil;
+import org.joda.time.DateTime;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/eduservice/oss")
@@ -30,6 +33,15 @@ public class FileUploadController {
         //1.获取上传的文件
         //2.获取文件名称，上传文件输入流
         String originalFilename = file.getOriginalFilename();
+        //名称之前添加UUI，保证名称不重复
+        String uid = UUID.randomUUID().toString();
+        originalFilename = uid + originalFilename;
+
+
+        //获取当前日期 2019/06/13
+        String filePath = new DateTime().toString("yyyy/MM/dd");
+        originalFilename = filePath+"/"+originalFilename;
+
         InputStream in = file.getInputStream();
 
 
