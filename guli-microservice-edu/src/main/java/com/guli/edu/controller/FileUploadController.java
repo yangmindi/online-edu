@@ -1,6 +1,5 @@
 package com.guli.edu.controller;
 
-import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
 import com.guli.common.vo.R;
 import com.guli.edu.handler.ConstantPropertiesUtil;
@@ -8,10 +7,8 @@ import org.joda.time.DateTime;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.UUID;
 
 @RestController
