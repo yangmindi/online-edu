@@ -22,4 +22,9 @@ public interface SubjectService extends IService<Subject>{
     List<OneSubjectDto> getSubjectList();
 
     boolean deleteSubjectById(String id);
+
+    //添加一级分类
+    boolean saveOneLevel(Subject subject);
+
+    boolean saveTwoLevel(Subject subject);
 }

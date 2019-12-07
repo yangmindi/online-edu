@@ -2,6 +2,7 @@ package com.guli.edu.controller;
 
 
 import com.guli.common.vo.R;
+import com.guli.edu.entity.Subject;
 import com.guli.edu.entity.dto.OneSubjectDto;
 import com.guli.edu.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,29 @@ import java.util.List;
 public class SubjectController {
     @Autowired
     private SubjectService service;
+
+    //添加二级分类
+    @PostMapping("addTwoLevel")
+    public R addTwoLevel(@RequestBody Subject subject){
+        boolean flag = service.saveTwoLevel(subject);
+        if(flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+    }
+
+    //添加一级分类
+    @PostMapping("addOneLevel")
+    public R addOneLevel(@RequestBody Subject subject){
+        boolean flag = service.saveOneLevel(subject);
+        if(flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+    }
+
 
     //3 删除一级分类
     @DeleteMapping("{id}")

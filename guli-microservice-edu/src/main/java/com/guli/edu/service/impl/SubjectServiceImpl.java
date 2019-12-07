@@ -138,6 +138,34 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectMapper, Subject> impl
         }
     }
 
+    //添加二级分类
+    @Override
+    public boolean saveTwoLevel(Subject eduSubject) {
+        //判断二级分类是否存在
+        Subject eduSubjectExist = this.existTwoSubject(eduSubject.getTitle(), eduSubject.getParentId());
+        if(eduSubjectExist == null) {//不存在
+            //添加
+            int insert = baseMapper.insert(eduSubject);
+            return insert>0;
+        }
+        return false;
+    }
+
+    //4.添加一级分类
+    @Override
+    public boolean saveOneLevel(Subject subject) {
+        //判断一级分类是否存在
+        Subject subjectExist = this.existOneSubject(subject.getTitle());
+        if(subjectExist == null){//不存在
+            //添加
+            //一级分类parentid=0
+            subject.setParentId("0");
+            int insert = baseMapper.insert(subject);
+            return insert>0;
+        }
+        return false;
+    }
+
     @Override
     public List<OneSubjectDto> getSubjectList() {
         //1 查询所有一级分类
