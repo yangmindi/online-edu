@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * <p>
  * 课程科目 前端控制器
@@ -27,8 +29,8 @@ public class SubjectController {
     //通过excel文件获取文件内容
     @PostMapping("import")
     public R importExcelSubject(@RequestParam("file") MultipartFile file){
-        service.importSubject(file);
-        return R.ok();
+        List<String> strings = service.importSubject(file);
+        return R.ok().data("msgList",strings);
     }
 }
 
