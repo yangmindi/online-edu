@@ -17,4 +17,6 @@ public interface CourseService extends IService<Course> {
     String insertCourseInfo(CourseInfoForm courseInfoForm);
 
     CourseInfoForm getIdCourse(String id);
+
+    Boolean updateCourse(CourseInfoForm courseInfoForm);
 }

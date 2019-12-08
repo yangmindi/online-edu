@@ -80,4 +80,25 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         //返回封装之后的对象
         return courseInfoForm;
     }
+
+    //修改课程信息（两张表）
+    @Override
+    public Boolean updateCourse(CourseInfoForm courseInfoForm) {
+        //1.修改课程基本信息表
+        Course eduCourse = new Course();
+        BeanUtils.copyProperties(courseInfoForm,eduCourse);
+        int result = baseMapper.updateById(eduCourse);
+        if(result == 0){
+            throw new GuliException(20001,"修改分类失败");
+        }
+
+        //2.修改课程描述表
+        CourseDescription courseDescription = new CourseDescription();
+        String id = courseInfoForm.getId();
+        String description = courseInfoForm.getDescription();
+        courseDescription.setId(id);
+        courseDescription.setDescription(description);
+        boolean b = courseDescriptionService.updateById(courseDescription);
+        return b;
+    }
 }

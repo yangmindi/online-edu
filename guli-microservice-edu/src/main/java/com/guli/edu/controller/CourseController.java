@@ -2,12 +2,14 @@ package com.guli.edu.controller;
 
 
 import com.guli.common.vo.R;
+import com.guli.edu.entity.Course;
 import com.guli.edu.entity.form.CourseInfoForm;
 import com.guli.edu.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.TreeSet;
 
 /**
@@ -25,6 +27,26 @@ public class CourseController {
 
     @Autowired
     private CourseService eduCourseService;
+
+    //课程链表
+    //TODO
+    @GetMapping("listCourse")
+    public R  getCourseList(){
+        List<Course> list = eduCourseService.list(null);
+        return R.ok().data("items",list);
+    }
+
+
+    //修改课程方法
+    @PostMapping("updateCourseInfo/{id}")
+    public R updateCourseInfo(@PathVariable String id,@RequestBody CourseInfoForm courseInfoForm){
+        Boolean flag = eduCourseService.updateCourse(courseInfoForm);
+        if(flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+    }
 
     //根据id查询课程信息
     @GetMapping("getCourseInfo/{id}")
