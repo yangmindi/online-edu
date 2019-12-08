@@ -21,4 +21,7 @@ public interface ChapterService extends IService<Chapter> {
 
     //根据课程id查询章节和小节
     List<EduChapterDto> getChapterVideoListCourseId(String courseId);
+
+    //如果章节下边有小节，就不删除
+    boolean removeChapterId(String chapterId);
 }

@@ -5,6 +5,7 @@ import com.guli.edu.entity.Chapter;
 import com.guli.edu.entity.Video;
 import com.guli.edu.entity.dto.EduChapterDto;
 import com.guli.edu.entity.dto.EduVideoDto;
+import com.guli.edu.handler.GuliException;
 import com.guli.edu.mapper.ChapterMapper;
 import com.guli.edu.service.ChapterService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -34,7 +35,7 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
     @Override
     public void deleteChapterByCourseId(String id) {
         QueryWrapper<Chapter> wapper = new QueryWrapper<>();
-        wapper.eq("course_id",id);
+        wapper.eq("course_id", id);
         baseMapper.delete(wapper);
     }
 
@@ -43,12 +44,12 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
 
         //1.根据课程id查询章节
         QueryWrapper<Chapter> wrapper = new QueryWrapper<>();
-        wrapper.eq("course_id",courseId);
+        wrapper.eq("course_id", courseId);
         List<Chapter> eduChapters = baseMapper.selectList(wrapper);
 
         //2.根据课程id查小节部分
         QueryWrapper<Video> wrapperVideo = new QueryWrapper<>();
-        wrapperVideo.eq("course_id",courseId);
+        wrapperVideo.eq("course_id", courseId);
         List<Video> eduVideos = videoService.list(wrapperVideo);
 
         //用于存储章节和小节的数据
@@ -60,7 +61,7 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
             Chapter chapter = eduChapters.get(i);
             //复制值到dto对象
             EduChapterDto eduChapterDto = new EduChapterDto();
-            BeanUtils.copyProperties(chapter,eduChapterDto);
+            BeanUtils.copyProperties(chapter, eduChapterDto);
 
 
             //集合，用于存储所有小节数据
@@ -72,10 +73,10 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
                 //获取每个小节
                 Video video = eduVideos.get(m);
                 //判断小节的chapterid和章节id是否一样
-                if(video.getChapterId().equals(chapter.getId())){
+                if (video.getChapterId().equals(chapter.getId())) {
                     //转换dto对象
                     EduVideoDto eduVideoDto = new EduVideoDto();
-                    BeanUtils.copyProperties(video,eduVideoDto);
+                    BeanUtils.copyProperties(video, eduVideoDto);
                     //dto对象放到集合中去
                     eduVideoDtoList.add(eduVideoDto);
 
@@ -91,5 +92,23 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
 
         //返回集合
         return chapterDtoList;
+    }
+
+    //删除章节
+    @Override
+    public boolean removeChapterId(String chapterId) {
+        //判断章节里面是否有小节
+        QueryWrapper<Video> wrapper = new QueryWrapper<>();
+        wrapper.eq("chapter_id", chapterId);
+        int count = videoService.count(wrapper);
+
+        //如果有小节不进行删除，没有才删除
+        if (count > 0) {
+            throw new GuliException(20001, "删除失败");
+        }
+        //没有才进行删除
+        int i = baseMapper.deleteById(chapterId);
+
+        return i > 0;
     }
 }
