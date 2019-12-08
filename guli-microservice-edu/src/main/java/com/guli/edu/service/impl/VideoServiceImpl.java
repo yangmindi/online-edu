@@ -22,7 +22,16 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     @Override
     public void deleteVideoByCourseId(String id) {
         QueryWrapper<Video> wrapper = new QueryWrapper<>();
-        wrapper.eq("course_id",id);
+        wrapper.eq("course_id", id);
         baseMapper.delete(wrapper);
+    }
+
+    //删除小节的方法
+    @Override
+    public boolean removeVideo(String videoId) {
+        //TODO 删除小节时还要删除阿里云视频，后面完善
+        int result = baseMapper.deleteById(videoId);
+
+        return result > 0;
     }
 }
