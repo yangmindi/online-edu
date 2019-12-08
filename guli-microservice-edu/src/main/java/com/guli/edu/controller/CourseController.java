@@ -28,6 +28,19 @@ public class CourseController {
     @Autowired
     private CourseService eduCourseService;
 
+
+    //删除课程的方法
+    @DeleteMapping("deleteCourse/{id}")
+    public R deleteCourse(@PathVariable String id){
+        boolean flag = eduCourseService.removeCourseId(id);
+        if(flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+    }
+
+
     //课程链表
     //TODO
     @GetMapping("listCourse")
