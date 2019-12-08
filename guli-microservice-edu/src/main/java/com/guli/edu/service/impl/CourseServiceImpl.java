@@ -56,4 +56,28 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
             return null;
         }
     }
+
+    //根据id查询课程信息
+    @Override
+    public CourseInfoForm getIdCourse(String id) {
+        //查询两张表
+        //1.查询id课程基本信息
+        Course course = baseMapper.selectById(id);
+        if(course == null){
+            //没有课程信息
+            throw new GuliException(20001,"没有课程信息");
+        }
+
+        CourseInfoForm courseInfoForm = new CourseInfoForm();
+        BeanUtils.copyProperties(course,courseInfoForm);
+
+        //到上一行代码，courseInfoForm对象有课程的基本信息，没有详细信息
+        //2.查描述
+        CourseDescription eduCourseDesciption = courseDescriptionService.getById(id);
+        String description = eduCourseDesciption.getDescription();
+        courseInfoForm.setDescription(description);
+
+        //返回封装之后的对象
+        return courseInfoForm;
+    }
 }

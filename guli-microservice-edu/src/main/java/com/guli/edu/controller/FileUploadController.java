@@ -4,6 +4,7 @@ import com.aliyun.oss.OSSClient;
 import com.guli.common.vo.R;
 import com.guli.edu.handler.ConstantPropertiesUtil;
 import org.joda.time.DateTime;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +20,7 @@ public class FileUploadController {
     //上传讲师头像的方法
     @PostMapping("upload")
     //@RequestParam("file")和表单中的name值相同
-    public R uploadTeacherImg(@RequestParam("file") MultipartFile file) throws IOException {//获取上传的文件
+    public R uploadTeacherImg(@RequestParam("file") MultipartFile file, @RequestParam(value = "host",required = false) String host) throws IOException {//获取上传的文件
 
         // Endpoint以杭州为例，其它Region请按实际情况填写。
         String endpoint = ConstantPropertiesUtil.ENDPOINT;
@@ -27,34 +28,42 @@ public class FileUploadController {
         String accessKeyId = ConstantPropertiesUtil.KEYID;
         String accessKeySecret = ConstantPropertiesUtil.KEYSECRET;
         String bucketName = ConstantPropertiesUtil.BUCKETNAME;
-        //1.获取上传的文件
-        //2.获取文件名称，上传文件输入流
-        String originalFilename = file.getOriginalFilename();
-        //名称之前添加UUI，保证名称不重复
-        String uid = UUID.randomUUID().toString();
-        originalFilename = uid + originalFilename;
+        try {
+            //1 获取到上传文件 MultipartFile file
+            //2 获取上传文件名称，获取上传文件输入流
+            String filename = file.getOriginalFilename();
+            //在文件名称之前添加uuid值，报纸文件名称不重复
+            String uuid = UUID.randomUUID().toString();
+            filename = uuid+filename;
 
+            //获取当前日期  2019/04/13
+            String filePath = new DateTime().toString("yyyy/MM/dd");
 
-        //获取当前日期 2019/06/13
-        String filePath = new DateTime().toString("yyyy/MM/dd");
-        originalFilename = filePath+"/"+originalFilename;
+            //拼接文件完整名称
+            //  2019/04/13/agdfegafadafe1.txt
+            filename = filePath+"/"+filename;
 
-        InputStream in = file.getInputStream();
+            InputStream in = file.getInputStream();
 
+            //3 把上传文件存储到阿里云oss里面
+            // 创建OSSClient实例。
+            OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 
-        //3.存储到OOS
-        // 创建OSSClient实例。
-        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+            // 上传文件流。
+            //第一个参数BucketName，第二个参数文件名称，第三个参数文件输入流
+            ossClient.putObject(bucketName, filename , in);
 
-        // 上传文件流。
-        ossClient.putObject(bucketName, originalFilename, in);
+            // 关闭OSSClient。
+            ossClient.shutdown();
 
-        // 关闭OSSClient。
-        ossClient.shutdown();
+            //返回上传之后oss存储路径
+            //http://edu-teacher1111.oss-cn-beijing.aliyuncs.com/04/13/01.jpg
+            String path = "http://"+bucketName+"."+endpoint+"/"+filename;
 
-        //返回OSS的存储路径
-        //https://youee.oss-cn-beijing.aliyuncs.com/timg%20%287%29.jpg
-        String path = "https://" + bucketName + "." + endpoint + "/" + originalFilename;
-        return R.ok().data("imgurl", path);
+            return R.ok().data("imgurl",path);
+        }catch(Exception e) {
+            e.printStackTrace();
+            return R.error();
+        }
     }
 }
