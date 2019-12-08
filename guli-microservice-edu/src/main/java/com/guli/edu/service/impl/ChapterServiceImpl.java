@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.guli.edu.entity.Chapter;
 import com.guli.edu.entity.Video;
 import com.guli.edu.entity.dto.EduChapterDto;
+import com.guli.edu.entity.dto.EduVideoDto;
 import com.guli.edu.mapper.ChapterMapper;
 import com.guli.edu.service.ChapterService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -60,10 +61,35 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
             //复制值到dto对象
             EduChapterDto eduChapterDto = new EduChapterDto();
             BeanUtils.copyProperties(chapter,eduChapterDto);
+
+
+            //集合，用于存储所有小节数据
+            List<EduVideoDto> eduVideoDtoList = new ArrayList<>();
+
+            //构建小节数据
+            //4.遍历小节
+            for (int m = 0; m < eduVideos.size(); m++) {
+                //获取每个小节
+                Video video = eduVideos.get(m);
+                //判断小节的chapterid和章节id是否一样
+                if(video.getChapterId().equals(chapter.getId())){
+                    //转换dto对象
+                    EduVideoDto eduVideoDto = new EduVideoDto();
+                    BeanUtils.copyProperties(video,eduVideoDto);
+                    //dto对象放到集合中去
+                    eduVideoDtoList.add(eduVideoDto);
+
+                }
+            }
+            //把小节最终放到每个章节里面
+            eduChapterDto.setChildren(eduVideoDtoList);
+
+
             //dto对象放到list集合里面
             chapterDtoList.add(eduChapterDto);
         }
 
+        //返回集合
         return chapterDtoList;
     }
 }
