@@ -29,6 +29,7 @@ public class CourseController {
     private CourseService eduCourseService;
 
 
+
     //删除课程的方法
     @DeleteMapping("deleteCourse/{id}")
     public R deleteCourse(@PathVariable String id){

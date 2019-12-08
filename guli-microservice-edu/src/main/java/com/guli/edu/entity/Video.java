@@ -51,7 +51,7 @@ public class Video implements Serializable {
     private Long playCount;
 
     @ApiModelProperty(value = "是否可以试听：0免费 1收费")
-    private Boolean free;
+    private Boolean isFree;
 
     @ApiModelProperty(value = "视频资源")
     private String videoSourceId;
