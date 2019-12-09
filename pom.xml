@@ -6,6 +6,8 @@
         <module>guli-microservice-edu</module>
         <module>guli-framework-common</module>
         <module>ossDemoTest</module>
+        <module>edu_vidservice</module>
+        <module>guli_edu_videoservice</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

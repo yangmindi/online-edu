@@ -29,20 +29,34 @@ public class CourseController {
     @Autowired
     private CourseService eduCourseService;
 
+    //最终发布课程的方法，修改课程状态
+    @GetMapping("publishCourse/{courseId}")
+    public R publishCourse(@PathVariable String courseId) {
+        Course eduCourse = new Course();
+        eduCourse.setId(courseId);
+        eduCourse.setStatus("Normal");
+        boolean b = eduCourseService.updateById(eduCourse);
+        if (b) {
+            return R.ok();
+        } else {
+            return R.error();
+        }
+    }
+
     //根据课程id查询课程详细信息
     @GetMapping("getAllCourseInfo/{courseId}")
-    public R getAllCourseInfo(@PathVariable String courseId){
+    public R getAllCourseInfo(@PathVariable String courseId) {
         CourseInfoDto courseInfoDto = eduCourseService.getCourseInfoAll(courseId);
-        return R.ok().data("courseInfo",courseInfoDto);
+        return R.ok().data("courseInfo", courseInfoDto);
     }
 
     //删除课程的方法
     @DeleteMapping("deleteCourse/{id}")
-    public R deleteCourse(@PathVariable String id){
+    public R deleteCourse(@PathVariable String id) {
         boolean flag = eduCourseService.removeCourseId(id);
-        if(flag){
+        if (flag) {
             return R.ok();
-        }else {
+        } else {
             return R.error();
         }
     }
@@ -51,35 +65,35 @@ public class CourseController {
     //课程链表
     //TODO
     @GetMapping("listCourse")
-    public R  getCourseList(){
+    public R getCourseList() {
         List<Course> list = eduCourseService.list(null);
-        return R.ok().data("items",list);
+        return R.ok().data("items", list);
     }
 
 
     //修改课程方法
     @PostMapping("updateCourseInfo/{id}")
-    public R updateCourseInfo(@PathVariable String id,@RequestBody CourseInfoForm courseInfoForm){
+    public R updateCourseInfo(@PathVariable String id, @RequestBody CourseInfoForm courseInfoForm) {
         Boolean flag = eduCourseService.updateCourse(courseInfoForm);
-        if(flag){
+        if (flag) {
             return R.ok();
-        }else {
+        } else {
             return R.error();
         }
     }
 
     //根据id查询课程信息
     @GetMapping("getCourseInfo/{id}")
-    public R getCourseInfo(@PathVariable String id){
+    public R getCourseInfo(@PathVariable String id) {
         CourseInfoForm courseInfoForm = eduCourseService.getIdCourse(id);
-        return R.ok().data("courseInfoForm",courseInfoForm);
+        return R.ok().data("courseInfoForm", courseInfoForm);
     }
 
     //1.添加课程信息
     @PostMapping
     public R addCourseInfo(@RequestBody CourseInfoForm courseInfoForm) {
         String courseId = eduCourseService.insertCourseInfo(courseInfoForm);
-        return R.ok().data("courseId",courseId);
+        return R.ok().data("courseId", courseId);
     }
 }
 
