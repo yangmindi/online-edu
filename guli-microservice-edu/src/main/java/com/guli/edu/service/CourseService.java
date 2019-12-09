@@ -2,6 +2,7 @@ package com.guli.edu.service;
 
 import com.guli.edu.entity.Course;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.guli.edu.entity.dto.CourseInfoDto;
 import com.guli.edu.entity.form.CourseInfoForm;
 
 /**
@@ -21,4 +22,6 @@ public interface CourseService extends IService<Course> {
     Boolean updateCourse(CourseInfoForm courseInfoForm);
 
     boolean removeCourseId(String id);
+
+    CourseInfoDto getCourseInfoAll(String courseId);
 }

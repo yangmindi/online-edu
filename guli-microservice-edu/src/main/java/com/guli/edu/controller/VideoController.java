@@ -27,6 +27,7 @@ public class VideoController {
     @DeleteMapping("{videoId}")
     public R deleteVideoId(@PathVariable String videoId){
         boolean flag = eduVideoService.removeVideo(videoId);
+        return R.ok();
     }
 
     //修改查询

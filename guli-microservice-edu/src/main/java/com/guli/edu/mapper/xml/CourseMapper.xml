@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.guli.edu.mapper.CourseMapper">
 
+<!--    根据课程id查询课程详情-->
+    <select id="getCourseInfoAll" resultType="com.guli.edu.entity.dto.CourseInfoDto">
+        select c.id,c.title,c.cover,c.price,cd.description,et.name as teacherName,
+            s1.title as levelOne,s2.title as levelTwo
+        from edu_course c left outer join edu_course_description cd on c.id = cd.id
+                          left outer join edu_teacher et on c.teacher_id = et.id
+                          left outer join edu_subject s1 on c.subject_parent_id = s1.id
+                          left outer join edu_subject s2 on c.subject_id = s2.id
+        where c.id=#{courseId}
+    </select>
 </mapper>

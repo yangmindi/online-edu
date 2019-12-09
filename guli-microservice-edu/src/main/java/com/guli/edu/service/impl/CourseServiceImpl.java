@@ -2,6 +2,7 @@ package com.guli.edu.service.impl;
 
 import com.guli.edu.entity.Course;
 import com.guli.edu.entity.CourseDescription;
+import com.guli.edu.entity.dto.CourseInfoDto;
 import com.guli.edu.entity.form.CourseInfoForm;
 import com.guli.edu.handler.GuliException;
 import com.guli.edu.mapper.CourseMapper;
@@ -130,5 +131,13 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         //4.删除课程本身
         int result = baseMapper.deleteById(id);
         return result > 0;
+    }
+
+    //根据课程id查询课程详细信息
+    @Override
+    public CourseInfoDto getCourseInfoAll(String courseId) {
+        CourseInfoDto courseInfoAll = baseMapper.getCourseInfoAll(courseId);
+
+        return courseInfoAll;
     }
 }
