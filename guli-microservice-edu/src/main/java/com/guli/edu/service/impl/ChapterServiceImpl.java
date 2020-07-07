@@ -10,6 +10,8 @@ import com.guli.edu.mapper.ChapterMapper;
 import com.guli.edu.service.ChapterService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.guli.edu.service.VideoService;
+import com.guli.edu.vo.ChapterVo;
+import com.guli.edu.vo.VideoVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,58 +42,51 @@ public class ChapterServiceImpl extends ServiceImpl<ChapterMapper, Chapter> impl
     }
 
     @Override
-    public List<EduChapterDto> getChapterVideoListCourseId(String courseId) {
+    public List<ChapterVo> getChapterVideoListCourseId(String courseId) {
 
-        //1.根据课程id查询章节
-        QueryWrapper<Chapter> wrapper = new QueryWrapper<>();
-        wrapper.eq("course_id", courseId);
-        List<Chapter> eduChapters = baseMapper.selectList(wrapper);
+        //最终要的到的数据列表
+        ArrayList<ChapterVo> chapterVoArrayList = new ArrayList<>();
 
-        //2.根据课程id查小节部分
-        QueryWrapper<Video> wrapperVideo = new QueryWrapper<>();
-        wrapperVideo.eq("course_id", courseId);
-        List<Video> eduVideos = videoService.list(wrapperVideo);
+        //获取章节信息
+        QueryWrapper<Chapter> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.eq("course_id", courseId);
+        queryWrapper1.orderByAsc("sort", "id");
+        List<Chapter> chapters = baseMapper.selectList(queryWrapper1);
 
-        //用于存储章节和小节的数据
-        List<EduChapterDto> chapterDtoList = new ArrayList<>();
+        //获取视频信息
+        QueryWrapper<Video> queryWrapper2 = new QueryWrapper<>();
+        queryWrapper2.eq("course_id", courseId);
+        queryWrapper2.orderByAsc("sort", "id");
+        List<Video> videos = videoService.list(queryWrapper2);
 
-        //3.遍历课程的所有章节，复制值到DTO对象
-        for (int i = 0; i < eduChapters.size(); i++) {
-            //获取每个章节
-            Chapter chapter = eduChapters.get(i);
-            //复制值到dto对象
-            EduChapterDto eduChapterDto = new EduChapterDto();
-            BeanUtils.copyProperties(chapter, eduChapterDto);
+        //填充章节vo数据
+        int count1 = chapters.size();
+        for (int i = 0; i < count1; i++) {
+            Chapter chapter = chapters.get(i);
 
+            //创建章节vo对象
+            ChapterVo chapterVo = new ChapterVo();
+            BeanUtils.copyProperties(chapter, chapterVo);
+            chapterVoArrayList.add(chapterVo);
 
-            //集合，用于存储所有小节数据
-            List<EduVideoDto> eduVideoDtoList = new ArrayList<>();
+            //填充视频vo数据
+            ArrayList<VideoVo> videoVoArrayList = new ArrayList<>();
+            int count2 = videos.size();
+            for (int j = 0; j < count2; j++) {
 
-            //构建小节数据
-            //4.遍历小节
-            for (int m = 0; m < eduVideos.size(); m++) {
-                //获取每个小节
-                Video video = eduVideos.get(m);
-                //判断小节的chapterid和章节id是否一样
-                if (video.getChapterId().equals(chapter.getId())) {
-                    //转换dto对象
-                    EduVideoDto eduVideoDto = new EduVideoDto();
-                    BeanUtils.copyProperties(video, eduVideoDto);
-                    //dto对象放到集合中去
-                    eduVideoDtoList.add(eduVideoDto);
+                Video video = videos.get(j);
+                if(chapter.getId().equals(video.getChapterId())){
 
+                    //创建视频vo对象
+                    VideoVo videoVo = new VideoVo();
+                    BeanUtils.copyProperties(video, videoVo);
+                    videoVoArrayList.add(videoVo);
                 }
             }
-            //把小节最终放到每个章节里面
-            eduChapterDto.setChildren(eduVideoDtoList);
-
-
-            //dto对象放到list集合里面
-            chapterDtoList.add(eduChapterDto);
+            chapterVo.setChildren(videoVoArrayList);
         }
 
-        //返回集合
-        return chapterDtoList;
+        return chapterVoArrayList;
     }
 
     //删除章节

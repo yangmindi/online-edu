@@ -7,6 +7,7 @@ import com.guli.edu.entity.Teacher;
 import com.guli.edu.entity.query.TeacherQuery;
 import com.guli.edu.service.TeacherService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * @since 2019-11-29
  */
 @RestController
-@RequestMapping("/eduservice/teacher")
+@RequestMapping("/admin/edu/teacher")
 @CrossOrigin
 public class TeacherController {
 
@@ -41,8 +42,15 @@ public class TeacherController {
     }
 
     //7.根据id修改的方法
+    @ApiOperation(value = "根据ID修改讲师")
     @PostMapping("updateTeacher/{id}")
-    public R updateTeacher(@RequestBody Teacher teacher){
+    public R updateTeacher(
+            @ApiParam(name = "id", value = "讲师ID", required = true)
+            @PathVariable String id,
+            @ApiParam(name = "teacher", value = "讲师对象", required = true)
+            @RequestBody Teacher teacher){
+
+        teacher.setId(id);
         boolean b = teacherService.updateById(teacher);
         if(b){
             return R.ok();
@@ -52,15 +60,21 @@ public class TeacherController {
     }
 
     //6.根据id查询讲师
+    @ApiOperation(value = "根据ID查询讲师")
     @GetMapping("getTeacherInfo/{id}")
-    public R getTeacherInfo(@PathVariable String id){
+    public R getTeacherInfo(
+            @ApiParam(name = "id", value = "讲师ID", required = true)
+            @PathVariable String id){
         Teacher teacher = teacherService.getById(id);
         return R.ok().data("eduTeacher", teacher);
     }
 
     //5.添加讲师的方法
+    @ApiOperation(value = "新增讲师")
     @PostMapping("addTeacher")
-    public R addTeacher(@RequestBody Teacher teacher) {
+    public R addTeacher(
+            @ApiParam(name = "teacher", value = "讲师对象", required = true)
+            @RequestBody Teacher teacher) {
         boolean save = teacherService.save(teacher);
         if (save) {
             return R.ok();
@@ -106,9 +120,13 @@ public class TeacherController {
         return R.ok().data("items", list);
     }
 
+
     //2 逻辑删除讲师
+    @ApiOperation(value = "根据ID删除讲师")
     @DeleteMapping("{id}")
-    public R deleteTeacherById(@PathVariable String id) {
+    public R deleteTeacherById(
+            @ApiParam(name = "id", value = "讲师ID", required = true)
+            @PathVariable String id) {
         boolean flag = teacherService.removeById(id);
         if(flag) {
             return R.ok();

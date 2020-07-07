@@ -8,6 +8,11 @@
         <module>ossDemoTest</module>
         <module>edu_vidservice</module>
         <module>guli_edu_videoservice</module>
+        <module>guli-commonservice-oss</module>
+        <module>guli-commonservice-excel-poi</module>
+        <module>guli-commonservice-eureka</module>
+        <module>guli-service-ucenter</module>
+        <module>guli-service-cms</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -95,6 +100,15 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger.version}</version>
+            </dependency>
+
+            <!--Spring Cloud-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.SR2</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

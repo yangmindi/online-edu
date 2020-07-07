@@ -5,6 +5,10 @@ import com.guli.common.vo.R;
 import com.guli.edu.entity.Chapter;
 import com.guli.edu.entity.dto.EduChapterDto;
 import com.guli.edu.service.ChapterService;
+import com.guli.edu.vo.ChapterVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +22,7 @@ import java.util.List;
  * @author Helen
  * @since 2019-12-08
  */
+@Api(description="课程章节管理")
 @RestController
 @RequestMapping("/eduservice/chapter")
 @CrossOrigin
@@ -69,9 +74,12 @@ public class ChapterController {
     }
 
     //1.根据课程id查询章节和小节
+    @ApiOperation(value = "根据课程id查询章节和小节")
     @GetMapping("getChapterVideoList/{courseId}")
-    public R getChapterVideoListCourseId(@PathVariable String courseId) {
-        List<EduChapterDto> list = chapterService.getChapterVideoListCourseId(courseId);
+    public R getChapterVideoListCourseId(
+            @ApiParam(name = "courseId", value = "课程ID", required = true)
+            @PathVariable String courseId) {
+        List<ChapterVo> list = chapterService.getChapterVideoListCourseId(courseId);
 
         return R.ok().data("items", list);
     }

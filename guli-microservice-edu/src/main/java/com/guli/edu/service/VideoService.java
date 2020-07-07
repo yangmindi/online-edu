@@ -2,6 +2,7 @@ package com.guli.edu.service;
 
 import com.guli.edu.entity.Video;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.guli.edu.entity.form.VideoInfoForm;
 
 /**
  * <p>
@@ -18,4 +19,12 @@ public interface VideoService extends IService<Video> {
 
     //删除小节
     boolean removeVideo(String videoId);
+
+    //添加小结
+    boolean saveVideoInfo(VideoInfoForm videoInfoForm);
+
+    VideoInfoForm getVideoInfoFormById(String videoId);
+
+    boolean updateVideoInfoById(VideoInfoForm videoInfoForm);
+
 }

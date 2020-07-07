@@ -3,6 +3,7 @@ package com.guli.edu.service;
 import com.guli.edu.entity.Chapter;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.guli.edu.entity.dto.EduChapterDto;
+import com.guli.edu.vo.ChapterVo;
 
 import java.util.List;
 
@@ -20,8 +21,9 @@ public interface ChapterService extends IService<Chapter> {
     void deleteChapterByCourseId(String id);
 
     //根据课程id查询章节和小节
-    List<EduChapterDto> getChapterVideoListCourseId(String courseId);
+    List<ChapterVo> getChapterVideoListCourseId(String courseId);
 
     //如果章节下边有小节，就不删除
     boolean removeChapterId(String chapterId);
+
 }
